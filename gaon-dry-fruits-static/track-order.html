@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="my-orders.html">My Orders</a></li>
+      </ul>
+      <div class="nav-icons"><a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a></div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Track Your Order</h1>
+    <p>Enter your tracking ID to check order status</p>
+  </div>
+
+  <div class="container tracking-page">
+    <div class="tracking-container">
+      <form class="tracking-input" onsubmit="trackOrder(event)">
+        <input type="text" id="trackingInput" placeholder="Enter Tracking ID (e.g., GDF12345678)" required>
+        <button type="submit" class="btn btn-primary">TRACK</button>
+      </form>
+      <div id="trackingResult"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding:20px 0">
+        <p>© 2024 Gaon Dry Fruits. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function trackOrder(e) {
+      e.preventDefault();
+      const trackingId = document.getElementById('trackingInput').value.trim();
+      const order = Orders.findByTrackingId(trackingId);
+      const result = document.getElementById('trackingResult');
+
+      if (!order) {
+        // Demo data
+        const demoOrder = {
+          trackingId, orderStatus: 'Shipped', createdAt: new Date(Date.now()-172800000).toISOString(),
+          items: [{name:'California Almonds',price:540,quantity:2,weight:250}],
+          totalAmount: 1080, shippingAddress: {name:'Demo User',city:'Delhi',phone:'9876543210',email:'demo@test.com',street:'123 MG Road',state:'Delhi',pincode:'110001'},
+          trackingHistory: [
+            {status:'Order Placed',date:new Date(Date.now()-172800000).toISOString(),note:'Order confirmed',location:'Warehouse'},
+            {status:'Confirmed',date:new Date(Date.now()-86400000).toISOString(),note:'Payment verified',location:'Varanasi Warehouse'},
+            {status:'Processing',date:new Date(Date.now()-43200000).toISOString(),note:'Packed and ready',location:'Varanasi Warehouse'},
+            {status:'Shipped',date:new Date().toISOString(),note:'Out for delivery',location:'Delhi Hub'},
+          ]
+        };
+        renderTracking(demoOrder);
+        return;
+      }
+      renderTracking(order);
+    }
+
+    function renderTracking(order) {
+      const statusSteps = ['Pending','Confirmed','Processing','Shipped','Delivered'];
+      const currentIdx = statusSteps.indexOf(order.orderStatus);
+      const result = document.getElementById('trackingResult');
+      
+      result.innerHTML = `
+        <div class="reveal" style="background:white;padding:25px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:30px;animation:scaleIn 0.5s ease">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+            <div><h3 style="color:var(--green-dark)">Order #${order.trackingId}</h3><p style="font-size:13px;color:#999">Placed on ${new Date(order.createdAt).toLocaleDateString()}</p></div>
+            <span class="status-badge ${order.orderStatus.toLowerCase()}">${order.orderStatus}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #eee">
+            <span style="font-size:14px">Ship to: ${order.shippingAddress?.name}, ${order.shippingAddress?.city}</span>
+            <strong style="color:var(--green);font-size:18px">${order.totalAmount}.00</strong>
+          </div>
+        </div>
+
+        <div class="reveal delay-2" style="background:white;padding:25px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:30px">
+          <h3 style="margin-bottom:20px;font-family:'Playfair Display';color:var(--green-dark)">Order Progress</h3>
+          <div class="progress-bar-container">
+            ${statusSteps.map((step, i) => `
+              <div class="progress-step ${i <= currentIdx ? 'active' : ''}">
+                <div class="step-icon"><i class="fas fa-${i <= currentIdx ? 'check' : 'circle'}"></i></div>
+                <span>${step}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="reveal delay-3" style="background:white;padding:25px;border-radius:12px;box-shadow:var(--shadow)">
+          <h3 style="margin-bottom:20px;font-family:'Playfair Display';color:var(--green-dark)">Tracking History</h3>
+          <div class="timeline">
+            ${(order.trackingHistory || []).reverse().map((item, i) => `
+              <div class="timeline-item">
+                <h4>${item.status}</h4>
+                <p>${item.note} — ${item.location || ''}</p>
+                <span class="time">${new Date(item.date).toLocaleString()}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:30px">
+          <button class="btn btn-primary" onclick="printLabel('${order.trackingId}')"><i class="fas fa-print"></i> Print Order Label</button>
+        </div>
+      `;
+      setTimeout(initScrollAnimations, 100);
+    }
+
+    function printLabel(trackingId) {
+      const order = Orders.findByTrackingId(trackingId);
+      if (!order) { showToast('Order not found'); return; }
+      const w = window.open('', '_blank');
+      w.document.write(`
+        <!DOCTYPE html><html><head><title>Order Label - ${order.trackingId}</title>
+        <style>body{font-family:Arial,sans-serif;padding:30px;max-width:600px;margin:0 auto}
+        .header{text-align:center;border-bottom:2px solid #2E7D32;padding-bottom:15px;margin-bottom:20px}
+        .header h1{color:#2E7D32;font-size:28px;margin:0}.header p{color:#8B5E34;margin:5px 0 0;font-size:14px}
+        .section{margin-bottom:20px}.section h3{color:#2E7D32;font-size:16px;border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:10px}
+        .row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}.row strong{color:#333}
+        .status{display:inline-block;padding:4px 12px;border-radius:12px;background:#E8F5E9;color:#2E7D32;font-weight:600;font-size:13px}
+        table{width:100%;border-collapse:collapse;margin-top:10px}th{background:#f5f5f5;padding:8px;text-align:left;font-size:13px}
+        td{padding:8px;border-bottom:1px solid #eee;font-size:13px}
+        .barcode{text-align:center;margin-top:20px;padding:15px;border:2px dashed #2E7D32;font-size:18px;letter-spacing:3px;font-weight:700;color:#2E7D32}
+        @media print{body{padding:15px}}</style></head><body>
+        <div class="header"><h1>Gaon Dry Fruits</h1><p>Nature Se Seedha, Sehat Ka Vaada</p><p style="font-size:12px;color:#999">Order Shipping Label</p></div>
+        <div class="section"><h3>📦 Order Details</h3>
+        <div class="row"><span>Order ID:</span><strong>${order.trackingId}</strong></div>
+        <div class="row"><span>Date:</span><strong>${new Date(order.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</strong></div>
+        <div class="row"><span>Status:</span><span class="status">${order.orderStatus}</span></div>
+        <div class="row"><span>Payment:</span><strong>${order.paymentMethod||'COD'}</strong></div></div>
+        <div class="section"><h3>🏠 Shipping Address</h3>
+        <div class="row"><span>Name:</span><strong>${order.shippingAddress?.name||'N/A'}</strong></div>
+        <div class="row"><span>Phone:</span><strong>${order.shippingAddress?.phone||'N/A'}</strong></div>
+        <div class="row"><span>Email:</span><strong>${order.shippingAddress?.email||'N/A'}</strong></div>
+        <div class="row"><span>Address:</span><strong>${order.shippingAddress?.street||''}, ${order.shippingAddress?.city||''}, ${order.shippingAddress?.state||''} - ${order.shippingAddress?.pincode||''}</strong></div></div>
+        <div class="section"><h3>🛒 Items</h3>
+        <table><thead><tr><th>Product</th><th>Qty</th><th>Weight</th><th>Price</th><th>Total</th></tr></thead><tbody>
+        ${order.items.map(i=>`<tr><td>${i.name}</td><td>${i.quantity}</td><td>${i.weight}g</td><td>${i.price}</td><td>${i.price*i.quantity}</td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="section"><div class="row" style="font-size:16px;border-top:2px solid #2E7D32;padding-top:10px"><span>Total Amount:</span><strong style="color:#2E7D32;font-size:18px">${order.totalAmount}.00</strong></div></div>
+        <div class="barcode">TRACKING: ${order.trackingId}</div>
+        <p style="text-align:center;font-size:11px;color:#999;margin-top:15px">Gaon Dry Fruits | Varanasi, UP | support@gaondryfruits.in | +91 98765 43210</p>
+        <script>window.onload=()=>window.print()<\/script>
+        </body></html>`);
+    }
+  </script>
+</body>
+</html>

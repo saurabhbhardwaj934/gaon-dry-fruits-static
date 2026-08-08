@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+      <span><i class="fas fa-award"></i> Premium Quality</span>
+      <span><i class="fas fa-lock"></i> Secure Payment</span>
+      <span><i class="fas fa-map-marker-alt"></i> <a href="track-order.html" style="color:white">Track Order</a></span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-icons">
+        <a href="shop.html"><i class="fas fa-search"></i></a>
+        <a href="login.html"><i class="fas fa-user"></i></a>
+        <a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container product-detail">
+    <div class="product-detail-grid" id="productDetail">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <section class="products">
+    <div class="container">
+      <div class="section-header"><h2>Related Products</h2><div class="divider"></div></div>
+      <div class="product-grid" id="relatedGrid"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding:20px 0">
+        <p>© 2024 Gaon Dry Fruits. All Rights Reserved.</p>
+        <div class="payment-icons"><span>VISA</span><span>UPI</span><span>COD</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+  <script src="js/main.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = parseInt(urlParams.get('id')) || 1;
+    const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+    let selectedWeight = product.weight;
+    let quantity = 1;
+
+    function renderProduct() {
+      const price = Cart.calculatePrice(product, selectedWeight);
+      const maxPriceForWeight = selectedWeight === 250 ? product.maxPrice : 0;
+      document.getElementById('productDetail').innerHTML = `
+        <div class="product-detail-img reveal">
+          <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/500x500/F5E9D3/2E7D32?text=${encodeURIComponent(product.name)}'">
+        </div>
+        <div class="product-detail-info reveal delay-2">
+          <span class="category-tag">${product.category}</span>
+          <h1>${product.name}</h1>
+          <div class="price">₹${price}.00 ${maxPriceForWeight ? `<span class="old-price">₹${maxPriceForWeight}.00</span>` : ''}</div>
+          <p class="description">${product.description}</p>
+          <div style="margin-bottom:15px">
+            <strong style="font-size:14px">Select Weight:</strong>
+            <div class="weight-selector">
+              ${[100,250,500,1000].map(w => `<button class="weight-btn ${selectedWeight===w?'active':''}" onclick="selectedWeight=${w}; renderProduct()">${w}g</button>`).join('')}
+            </div>
+          </div>
+          <div class="qty-selector">
+            <strong style="font-size:14px">Quantity:</strong>
+            <button onclick="quantity=Math.max(1,quantity-1); renderProduct()">−</button>
+            <span>${quantity}</span>
+            <button onclick="quantity++; renderProduct()">+</button>
+          </div>
+          <div style="display:flex;gap:15px;margin-bottom:20px">
+            <button class="btn btn-primary" style="flex:1" onclick="Cart.addToCart(${product.id}, selectedWeight, quantity); window.location.href='cart.html'">
+              <i class="fas fa-shopping-cart"></i> ADD TO CART
+            </button>
+            <a href="cart.html" class="btn btn-outline" style="flex:1;text-align:center">BUY NOW</a>
+          </div>
+          <div style="background:#f9f9f9;padding:20px;border-radius:8px">
+            <h4 style="font-family:Poppins;font-size:14px;margin-bottom:10px">Product Benefits:</h4>
+            <ul style="list-style:none;font-size:13px;color:#666">
+              <li style="margin-bottom:5px">✅ 100% Natural & Fresh</li>
+              <li style="margin-bottom:5px">✅ Rich in Vitamins & Minerals</li>
+              <li style="margin-bottom:5px">✅ No Preservatives Added</li>
+              <li style="margin-bottom:5px">✅ Hygienically Packed</li>
+              <li>✅ Free Delivery on Orders Above ₹999</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    renderProduct();
+
+    // Related products
+    const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+    if (related.length) renderProductsGrid('relatedGrid', related);
+  </script>
+</body>
+</html>

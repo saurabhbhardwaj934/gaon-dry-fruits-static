@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+      <span><i class="fas fa-award"></i> Premium Quality</span>
+      <span><i class="fas fa-lock"></i> Secure Payment</span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+      </ul>
+      <div class="nav-icons"><a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a></div>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container">
+      <h2>Welcome Back</h2>
+      <p>Sign in to your Gaon Dry Fruits account</p>
+      <div id="errorBox" style="display:none;background:#FFEBEE;color:#C62828;padding:10px;border-radius:4px;margin-bottom:15px;font-size:13px"></div>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" required placeholder="your@email.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPass" required placeholder="Enter password"></div>
+        <button type="submit" class="btn btn-primary">SIGN IN</button>
+      </form>
+      <p class="auth-link">Don't have an account? <a href="register.html">Register Now</a></p>
+      <p class="auth-link" style="font-size:12px;color:#999">Admin: admin@gaondryfruits.in / admin123</p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPass').value;
+      const errorBox = document.getElementById('errorBox');
+      
+      // Check demo users
+      if (email === 'admin@gaondryfruits.in' && pass === 'admin123') {
+        User.save({ _id: 'admin1', name: 'Admin', email, isAdmin: true });
+        window.location.href = 'admin.html';
+      } else if (pass.length >= 4) {
+        User.save({ _id: 'user1', name: email.split('@')[0], email, isAdmin: false });
+        window.location.href = 'my-orders.html';
+      } else {
+        errorBox.textContent = 'Invalid email or password (min 4 chars)';
+        errorBox.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

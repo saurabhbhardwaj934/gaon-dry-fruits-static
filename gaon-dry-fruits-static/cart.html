@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+      <span><i class="fas fa-award"></i> Premium Quality</span>
+      <span><i class="fas fa-lock"></i> Secure Payment</span>
+      <span><i class="fas fa-map-marker-alt"></i> <a href="track-order.html" style="color:white">Track Order</a></span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-icons">
+        <a href="login.html"><i class="fas fa-user"></i></a>
+        <a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container cart-page">
+    <h2 style="font-family:'Playfair Display';font-size:32px;color:var(--green-dark);margin-bottom:30px" class="reveal">Shopping Cart</h2>
+    <div class="cart-layout">
+      <div class="cart-items" id="cartItems">
+        <!-- Filled by JS -->
+      </div>
+      <div class="cart-summary reveal delay-2">
+        <h3>Cart Summary</h3>
+        <div id="cartSummaryDetails"></div>
+        <a href="checkout.html" class="btn btn-primary" id="checkoutBtn" style="margin-top:15px">PROCEED TO CHECKOUT</a>
+        <a href="shop.html" class="btn btn-outline" style="width:100%;margin-top:10px;text-align:center">CONTINUE SHOPPING</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding:20px 0">
+        <p>© 2024 Gaon Dry Fruits. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    function renderCart() {
+      const items = Cart.getItems();
+      const container = document.getElementById('cartItems');
+      const summary = document.getElementById('cartSummaryDetails');
+      const checkoutBtn = document.getElementById('checkoutBtn');
+
+      if (items.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart"></i><h2>Your cart is empty</h2><p>Add some delicious dry fruits!</p><a href="shop.html" class="btn btn-primary">SHOP NOW</a></div>';
+        summary.innerHTML = '<p style="color:#999">No items in cart</p>';
+        checkoutBtn.style.display = 'none';
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div><h4>${item.name}</h4><span style="font-size:12px;color:#999">${item.weight}g</span></div>
+          <div>${item.price}.00</div>
+          <div class="cart-qty">
+            <button onclick="Cart.updateQuantity(${item.id}, ${item.weight}, ${item.quantity-1}); renderCart()">−</button>
+            <span>${item.quantity}</span>
+            <button onclick="Cart.updateQuantity(${item.id}, ${item.weight}, ${item.quantity+1}); renderCart()">+</button>
+          </div>
+          <button class="remove-btn" onclick="Cart.removeFromCart(${item.id}, ${item.weight}); renderCart()"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('');
+
+      const subtotal = Cart.getSubtotal();
+      const shipping = Cart.getShipping(subtotal);
+      const total = Cart.getTotal(subtotal, shipping);
+
+      summary.innerHTML = `
+        <div class="cart-summary-row"><span>Subtotal</span><span>₹${subtotal}.00</span></div>
+        <div class="cart-summary-row"><span>Shipping</span><span>${shipping === 0 ? 'FREE' : '₹'+shipping+'.00'}</span></div>
+        ${shipping > 0 ? `<p style="font-size:12px;color:var(--green);margin-bottom:10px">Add ₹${999-subtotal} more for free shipping!</p>` : ''}
+        <div class="cart-summary-row total"><span>Total</span><span>₹${total}.00</span></div>
+      `;
+    }
+    renderCart();
+  </script>
+</body>
+</html>

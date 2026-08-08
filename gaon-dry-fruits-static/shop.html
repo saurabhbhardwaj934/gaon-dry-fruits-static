@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+      <span><i class="fas fa-award"></i> Premium Quality</span>
+      <span><i class="fas fa-lock"></i> Secure Payment</span>
+      <span><i class="fas fa-map-marker-alt"></i> <a href="track-order.html" style="color:white">Track Order</a></span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-icons">
+        <a href="shop.html"><i class="fas fa-search"></i></a>
+        <a href="login.html" id="userIcon"><i class="fas fa-user"></i></a>
+        <a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>Shop Our Products</h1>
+    <p>Premium dry fruits for a healthier you</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> / <span>Shop</span></div>
+  </div>
+
+  <div class="container">
+    <div class="shop-layout">
+      <aside class="sidebar reveal">
+        <div class="filter-section">
+          <h3>CATEGORIES</h3>
+          <div id="categoryFilters"></div>
+        </div>
+        <div class="filter-section">
+          <h3>FILTER BY</h3>
+          <p style="font-size:13px;margin-bottom:10px">Price</p>
+          <div class="price-range">
+            <input type="number" id="minPrice" value="0" placeholder="₹0" min="0">
+            <span>—</span>
+            <input type="number" id="maxPrice" value="3000" placeholder="₹3000" max="3000">
+          </div>
+        </div>
+        <div class="filter-section">
+          <h3>Weight</h3>
+          <label><input type="radio" name="weight" value="" checked onchange="applyFilters()"> All</label>
+          <label><input type="radio" name="weight" value="100" onchange="applyFilters()"> 100g</label>
+          <label><input type="radio" name="weight" value="250" onchange="applyFilters()"> 250g</label>
+          <label><input type="radio" name="weight" value="500" onchange="applyFilters()"> 500g</label>
+          <label><input type="radio" name="weight" value="1000" onchange="applyFilters()"> 1000g</label>
+        </div>
+      </aside>
+      <div>
+        <div class="shop-header">
+          <span class="results-count" id="resultsCount">Showing all products</span>
+          <select id="sortBy" onchange="applyFilters()">
+            <option value="default">Default sorting</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name A-Z</option>
+          </select>
+        </div>
+        <div class="product-grid" id="shopGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border:none;padding:20px 0">
+        <p>© 2024 Gaon Dry Fruits. All Rights Reserved.</p>
+        <div class="payment-icons"><span>VISA</span><span>UPI</span><span>COD</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+
+  <script src="js/main.js"></script>
+  <script>
+    let currentCategory = 'All';
+    
+    // Parse URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('category')) currentCategory = urlParams.get('category');
+
+    // Render category filters
+    document.getElementById('categoryFilters').innerHTML = CATEGORIES.map(c => `
+      <label><input type="radio" name="cat" value="${c}" ${c === currentCategory ? 'checked' : ''} onchange="currentCategory='${c}'; applyFilters()">${c}</label>
+    `).join('');
+
+    function applyFilters() {
+      let filtered = [...PRODUCTS];
+      const minP = parseInt(document.getElementById('minPrice').value) || 0;
+      const maxP = parseInt(document.getElementById('maxPrice').value) || 3000;
+      const weight = document.querySelector('input[name="weight"]:checked')?.value;
+      const sort = document.getElementById('sortBy').value;
+
+      if (currentCategory && currentCategory !== 'All') filtered = filtered.filter(p => p.category === currentCategory);
+      filtered = filtered.filter(p => p.price >= minP && p.price <= maxP);
+      if (weight) filtered = filtered.filter(p => p.weight === parseInt(weight));
+
+      if (sort === 'price-low') filtered.sort((a,b) => a.price - b.price);
+      else if (sort === 'price-high') filtered.sort((a,b) => b.price - a.price);
+      else if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+      document.getElementById('shopGrid').innerHTML = filtered.length ? filtered.map(renderProductCard).join('') : '<div class="empty-state"><h2>No products found</h2><p>Try different filters</p></div>';
+      document.getElementById('resultsCount').textContent = `Showing ${filtered.length} of ${PRODUCTS.length} products`;
+      setTimeout(initScrollAnimations, 100);
+    }
+
+    applyFilters();
+  </script>
+</body>
+</html>

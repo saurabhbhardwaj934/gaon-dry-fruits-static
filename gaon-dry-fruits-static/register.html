@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container">
+      <span><i class="fas fa-leaf"></i> 100% Natural</span>
+      <span><i class="fas fa-truck"></i> Fast & Safe Delivery</span>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a>
+      <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li></ul>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container">
+      <h2>Create Account</h2>
+      <p>Join Gaon Dry Fruits family</p>
+      <div id="errorBox" style="display:none;background:#FFEBEE;color:#C62828;padding:10px;border-radius:4px;margin-bottom:15px;font-size:13px"></div>
+      <form onsubmit="handleRegister(event)">
+        <div class="form-group"><label>Full Name</label><input id="regName" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="regPhone" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPass" required minlength="4"></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="regConfirm" required></div>
+        <button type="submit" class="btn btn-primary">CREATE ACCOUNT</button>
+      </form>
+      <p class="auth-link">Already have an account? <a href="login.html">Sign In</a></p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    function handleRegister(e) {
+      e.preventDefault();
+      const pass = document.getElementById('regPass').value;
+      const confirm = document.getElementById('regConfirm').value;
+      const errorBox = document.getElementById('errorBox');
+      if (pass !== confirm) { errorBox.textContent = 'Passwords do not match'; errorBox.style.display='block'; return; }
+      User.save({ _id: 'user'+Date.now(), name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, phone: document.getElementById('regPhone').value, isAdmin: false });
+      showToast('Account created! Please login.');
+      setTimeout(() => window.location.href = 'login.html', 1500);
+    }
+  </script>
+</body>
+</html>

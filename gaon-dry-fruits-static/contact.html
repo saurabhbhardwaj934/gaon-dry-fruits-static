@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Gaon Dry Fruits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="top-bar"><div class="container"><span><i class="fas fa-leaf"></i> 100% Natural</span><span><i class="fas fa-truck"></i> Fast & Safe Delivery</span></div></div>
+  <nav class="navbar"><div class="container"><a href="index.html" class="logo"><div><div class="logo-text">Gaon</div><div class="logo-sub">Dry Fruits</div></div></a><ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html" class="active">Contact</a></li></ul><div class="nav-icons"><a href="cart.html" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="cart-count" style="display:none">0</span></a></div></div></nav>
+
+  <div class="page-header"><h1>Contact Us</h1><p>We'd love to hear from you</p></div>
+
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3 style="font-family:'Playfair Display';color:var(--green-dark);margin-bottom:20px">Get In Touch</h3>
+        <div class="contact-info-item"><i class="fas fa-map-marker-alt"></i><div><strong>Address</strong><br><span style="color:#666">Varanasi, Uttar Pradesh, India</span></div></div>
+        <div class="contact-info-item"><i class="fas fa-phone"></i><div><strong>Phone</strong><br><span style="color:#666">+91 98765 43210</span></div></div>
+        <div class="contact-info-item"><i class="fas fa-envelope"></i><div><strong>Email</strong><br><span style="color:#666">support@gaondryfruits.in</span></div></div>
+        <div class="contact-info-item"><i class="fas fa-clock"></i><div><strong>Hours</strong><br><span style="color:#666">Mon - Sat: 9:00 AM - 7:00 PM</span></div></div>
+      </div>
+      <div class="reveal delay-2" style="background:white;padding:30px;border-radius:12px;box-shadow:var(--shadow)">
+        <h3 style="font-family:'Playfair Display';color:var(--green-dark);margin-bottom:20px">Send Message</h3>
+        <form onsubmit="event.preventDefault(); showToast('Message sent! We will reply within 24 hours.'); this.reset();">
+          <div class="form-group"><label>Name</label><input required></div>
+          <div class="form-group"><label>Email</label><input type="email" required></div>
+          <div class="form-group"><label>Phone</label><input type="tel" required></div>
+          <div class="form-group"><label>Message</label><textarea rows="4" required></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%">SEND MESSAGE</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom" style="border:none;padding:20px 0"><p>© 2024 Gaon Dry Fruits. All Rights Reserved.</p></div></div></footer>
+  <script src="js/main.js"></script>
+</body>
+</html>
