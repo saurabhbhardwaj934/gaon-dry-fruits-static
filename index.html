@@ -54,21 +54,90 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <span class="hero-badge">100% NATURAL</span>
-        <h1 class="animate-fade-up">Nature Se Seedha,<br><span>Sehat Ka Vaada</span></h1>
-        <p class="animate-fade-up delay-2">Premium quality dry fruits and healthy nuts for a better you. Sourced
-          directly from the best growers and packed with care.</p>
-        <a href="shop.html" class="btn btn-primary animate-fade-up delay-3">SHOP NOW</a>
+  <section class="hero-slider" aria-label="Featured products">
+  <div class="slider-track">
+
+    <!-- Slide 1 -->
+    <article class="hero-slide active">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">100% NATURAL</span>
+          <h1>Nature Se Seedha,<br><span>Sehat Ka Vaada</span></h1>
+          <p>
+            Premium quality dry fruits and healthy nuts for a better you.
+            Sourced directly from the best growers and packed with care.
+          </p>
+          <a href="shop.html" class="btn btn-primary">SHOP NOW <span>→</span></a>
+        </div>
+
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=900&h=700&fit=crop"
+            alt="Premium dry fruits assortment">
+          <div class="hero-natural-badge">100%<br><small>NATURAL</small></div>
+          <div class="image-glow"></div>
+        </div>
       </div>
-      <div class="hero-image animate-fade-right">
-        <img src="https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=600&h=500&fit=crop" alt="Dry Fruits">
-        <div class="hero-natural-badge">100%<br>NATURAL</div>
+    </article>
+
+    <!-- Slide 2 -->
+    <article class="hero-slide">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">FRESH & HEALTHY</span>
+          <h1>Healthy Snacking,<br><span>Har Din Better</span></h1>
+          <p>
+            Handpicked almonds, cashews, walnuts and more—delivered fresh
+            to your doorstep with natural goodness intact.
+          </p>
+          <a href="shop.html" class="btn btn-primary">EXPLORE NUTS <span>→</span></a>
+        </div>
+
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=900&h=700&fit=crop"
+            alt="Healthy nuts and almonds">
+          <div class="hero-natural-badge">FRESH<br><small>DAILY</small></div>
+          <div class="image-glow"></div>
+        </div>
       </div>
-    </div>
-  </section>
+    </article>
+
+    <!-- Slide 3 -->
+    <article class="hero-slide">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">PREMIUM QUALITY</span>
+          <h1>Dry Fruits Ka<br><span>Royal Taste</span></h1>
+          <p>
+            Celebrate every moment with rich, delicious and nutritious dry
+            fruits selected from the finest farms.
+          </p>
+          <a href="shop.html" class="btn btn-primary">VIEW COLLECTION <span>→</span></a>
+        </div>
+
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1508747703725-719777637510?w=900&h=700&fit=crop"
+            alt="Premium mixed dry fruits">
+          <div class="hero-natural-badge">BEST<br><small>QUALITY</small></div>
+          <div class="image-glow"></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- Navigation Arrows -->
+  <button class="slider-arrow prev" aria-label="Previous slide">←</button>
+  <button class="slider-arrow next" aria-label="Next slide">→</button>
+
+  <!-- Dots -->
+  <div class="slider-dots" role="tablist" aria-label="Slider navigation">
+    <button class="dot active" aria-label="Go to slide 1"></button>
+    <button class="dot" aria-label="Go to slide 2"></button>
+    <button class="dot" aria-label="Go to slide 3"></button>
+  </div>
+
+  <div class="slider-progress"><span></span></div>
+</section>
 
   <!-- Features Bar -->
   <section class="features-bar">
