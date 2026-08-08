@@ -248,12 +248,88 @@ function renderProductsGrid(containerId, products) {
   }
 }
 
+// ============ HERO SLIDER ============
+function initHeroSlider() {
+  const container = document.querySelector('.hero-slider-container');
+  if (!container) return;
+
+  const slides = container.querySelectorAll('.hero-slide');
+  const prevBtn = container.querySelector('.prev-btn');
+  const nextBtn = container.querySelector('.next-btn');
+  const dots = container.querySelectorAll('.slider-dots .dot');
+  
+  if (slides.length <= 1) return;
+
+  let currentIndex = 0;
+  let autoplayTimer = null;
+  const AUTOPLAY_DELAY = 5000;
+
+  function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+
+    currentIndex = (index + slides.length) % slides.length;
+    
+    slides[currentIndex].classList.add('active');
+    if (dots[currentIndex]) {
+      dots[currentIndex].classList.add('active');
+    }
+  }
+
+  function nextSlide() {
+    showSlide(currentIndex + 1);
+  }
+
+  function prevSlide() {
+    showSlide(currentIndex - 1);
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', () => {
+    prevSlide();
+    resetAutoplay();
+  });
+  
+  if (nextBtn) nextBtn.addEventListener('click', () => {
+    nextSlide();
+    resetAutoplay();
+  });
+
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      showSlide(idx);
+      resetAutoplay();
+    });
+  });
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(nextSlide, AUTOPLAY_DELAY);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  function resetAutoplay() {
+    startAutoplay();
+  }
+
+  container.addEventListener('mouseenter', stopAutoplay);
+  container.addEventListener('mouseleave', startAutoplay);
+
+  startAutoplay();
+}
+
 // ============ INITIALIZE ============
 document.addEventListener('DOMContentLoaded', () => {
   Cart.updateBadge();
   initScrollAnimations();
   initNavbarScroll();
   initScrollTop();
+  initHeroSlider();
   
   // Active nav link
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
